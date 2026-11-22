@@ -2,21 +2,36 @@ Before submitting this file, make sure that there are no more TODO
 placeholders remaining in the file (and remove this comment too).
 
 Q1. Use the above encoding tree to decode the bit sequence `0101100011`.
-A1. TODO
+A1. MOONS
 
 Q2. Prepare a table for the above encoding tree that lists each character with its assigned bit sequence.
 Use your table to encode the string `"SONS"`.
-A2. TODO
+A2.
+O = 1
+N = 00
+M = 010
+S = 011
+
+"SONS" = 011 1 00 011 = 011100011
 
 Q3. Huffman codes obey the _prefix_ property: no character's encoded bit sequence is a prefix of any other.
 What feature of an encoding tree demonstrates that it obeys the prefix property?
-A3. TODO
+A3. Every character is stored at a leaf node, and interior nodes have no characters. So the path to one character never passes through another character, which means no code can be the start of another code.
 
 Q4. Flatten the encoding tree above on the right into its sequence of bits (tree shape) and sequence of characters (tree leaves).
-A4. TODO
+A4.
+Tree shape: 1101000
+Tree leaves: NMSO
 
 Q5. Unflatten the sequences `110100100` (tree shape) and `FLERA` (tree leaves) to reconstruct the original encoding tree.
-A5. TODO
+A5.
+Level 0: root (interior node)
+Level 1: root's 0 child = interior node, root's 1 child = interior node
+Level 2: left interior node's children: 0 = F, 1 = interior node right interior node's children: 0 = R, 1 = A
+Level 3: that interior node's children: 0 = L, 1 = E
+
+Resulting codes: F = 00, L = 010, E = 011, R = 10, A = 11
+
 
 Q6. Construct a Huffman coding tree for the input `"BOOKKEEPER"`.
 A6. TODO
