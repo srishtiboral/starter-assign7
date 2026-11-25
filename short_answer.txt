@@ -1,6 +1,3 @@
-Before submitting this file, make sure that there are no more TODO
-placeholders remaining in the file (and remove this comment too).
-
 Q1. Use the above encoding tree to decode the bit sequence `0101100011`.
 A1. MOONS
 
@@ -34,12 +31,38 @@ Resulting codes: F = 00, L = 010, E = 011, R = 10, A = 11
 
 
 Q6. Construct a Huffman coding tree for the input `"BOOKKEEPER"`.
-A6. TODO
+A6.
+COUNTS: B - 1, P - 1, R - 1, O - 2, K - 2, E - 3
+
+Merge 1: B(1) + P(1) → [BP]:2
+	new list: R:1, 0:2, K:2, BP:2, E:3
+Merge 2: R(1) + O(2) → [RO]:3
+	new list: K:2, BP:2, RO:3, E:3
+Merge 3: K(2) + BP(2) → [K, BP]:4
+	new list: RO:3, E:3, [K, BP]:4
+Merge 4: RO(3) + E(3) → [RO, E]:6
+	new list: [K, BP]:4, [RO, E]:6
+Merge 5: [K, BP](4) + [RO, E](6) → [K, BP, RO, E]:10
+
+TREE: 			10
+		4		6
+	    K       2	   3         E
+		  B   P   R   O
+
 
 Q7. Calculate the entropy of your Huffman tree for `"BOOKKEEPER"`.
 Confirm that if you had chosen to break ties in a different manner when constructing the tree,
 this alternate tree has the same entropy as the optimal result.
-A7. TODO
+A7.
+CODES: K:00, Count:2 → 2x2 = 4 bits used
+       B:010, Count:1 → 3x1 = 3 bits used
+       P:011, Count:1 → 3x1 = 3 bits used
+       R:100, Count:1 → 3x1 = 3 bits used 
+       O:101, Count:2 → 3x2 = 6 bits used
+       E:11, Count:3 → 2x3 = 6 bits used
+Total entropy = 4+3+3+3+6+6 = 25 bits
+Average entropy = 25 / 10 (num chars) = 2.5 bits per character
+
 
 Q8. Consider the space of inputs of length 1000 that consists of varied occurrences of 100 distinct characters.
 Of those various inputs, contrast which inputs result in a balanced Huffman tree versus those that produce a
