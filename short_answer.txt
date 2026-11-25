@@ -62,6 +62,7 @@ CODES: K:00, Count:2 → 2x2 = 4 bits used
        E:11, Count:3 → 2x3 = 6 bits used
 Total entropy = 4+3+3+3+6+6 = 25 bits
 Average entropy = 25 / 10 (num chars) = 2.5 bits per character
+Even if we chose to chose to break ties in a different manner, for example pairing R with BP as opposed to O, we still would have ended up with the same total number of bits (25) and therefore the same average entropy. 
 
 
 Q8. Consider the space of inputs of length 1000 that consists of varied occurrences of 100 distinct characters.
@@ -71,5 +72,8 @@ very lopsided Huffman tree. As an example, what if each of the 100 characters we
 What if, instead, 99 of the characters was represented only once, but the remaining character was represented 901 times (again, for a total of 1000 characters)? What would the Huffman tree look like?
 Which of the two Huffman trees achieves more significant compression?
 What does this tell you about what makes for a "good" versus "bad" Huffman tree?
-A8. TODO
+A8. 
+If each of the 100 chars appears 10 times, this means that all the weights are equal so the Huffman algorithm would result in a balanced tree. 28 characters get 6-bit codes and 72 get 7-bit codes, so the total number of bits would be 10 x (28*6 + 72*7) = 6,720 bits / 100 = 6.72 bits per character average entropy as opposed to 7. If we calculate the percent change : (6.72-7)/7 =-0.04, so only a 4% reduction. 
+If one character appears 901 times and the other 99 only appear once, the 99 would get grouped into a balanced tree and the heavily weighted one would just sit as a lone branch on the other side of the large, balanced tree at the node. This would result in a lopsided tree with total bits: 901*1 + 29*7 + 70*8 = 1,664 bits / 100 = 1.66 bits per character. If we calculate the percent change again, we get (1.66-7)/7 = -0.763, so a 76.3% reduction, which is much more significant. 
+We can conclude from these calculations that the lopsided tree compresses much more efficiently because the Huffman algorithm grouped the similarly-weighted "1" characters into shorter codes. Because of the large skew between the "1" characters and the "901" character, the codes are nonuniform and therefore the Huffman algorithm can actually make a significant reduction in compression. 
 
