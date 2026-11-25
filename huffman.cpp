@@ -140,28 +140,101 @@ EncodingTreeNode* createExampleTree() {
      *                / \
      *               R   S
      */
-    /* TODO: Implement this utility function needed for testing. */
-    return nullptr;
+    EncodingTreeNode* rs = new EncodingTreeNode(new EncodingTreeNode('R'),
+                                                new EncodingTreeNode('S')); // bottom level
+    EncodingTreeNode* rse = new EncodingTreeNode(rs, new EncodingTreeNode('E')); // next level up
+    return new EncodingTreeNode(new EncodingTreeNode('T'), rse); // root
 }
 
 void deallocateTree(EncodingTreeNode* t) {
-    /* TODO: Implement this utility function needed for testing. */
+    if (!t) { // if already empty, nothing to do
+        return;
+    }
+    deallocateTree(t->zero); // delete left child/subtree
+    deallocateTree(t->one); // delete right child/subtree
+    delete t; // delete this node
 }
 
 bool areEqual(EncodingTreeNode* a, EncodingTreeNode* b) {
-    /* TODO: Implement this utility function needed for testing. */
-    return false;
+    if (!a && !b) {
+        return true;
+    }
+    if (!a || !b) {
+        return false;
+    }
+    if (a->isLeaf() && b->isLeaf()) {
+        return (a->getChar() == b->getChar());
+    }
+    if (a->isLeaf() || b->isLeaf()) {
+        return false;
+    }
+
+    return areEqual(a->zero, b->zero) && areEqual(a->one, b->one);
 }
 
 /* * * * * * Test Cases Below This Point * * * * * */
 
-/* TODO: Write your own student tests. */
+// STUDENT TESTS
+STUDENT_TEST("check that two empty trees are equal") {
+    EXPECT(areEqual(nullptr, nullptr));
+}
 
 
+STUDENT_TEST("test areEqual on simple vs empty tree") {
+    EncodingTreeNode* simple = new EncodingTreeNode(new EncodingTreeNode('A'),
+                                                    new EncodingTreeNode('B')); // simple tree
+    EXPECT(!areEqual(simple, nullptr)); // shouldn't be equal
+    EXPECT(!areEqual(nullptr, simple)); // regardless of order
+    deallocateTree(simple);
+}
+
+STUDENT_TEST("check areEqual on simple tree copy, then swap children, change chars") {
+    EncodingTreeNode* a = new EncodingTreeNode(new EncodingTreeNode('A'),
+                                              new EncodingTreeNode('B'));
+    EncodingTreeNode* b = new EncodingTreeNode(new EncodingTreeNode('A'),
+                                              new EncodingTreeNode('B')); // two copies
+    EXPECT(areEqual(a, b));
+
+    // swap children of b
+    EncodingTreeNode* temp = b->zero;
+    b->zero = b->one;
+    b->one = temp;
+    EXPECT(!areEqual(a, b));
+
+    // change chars
+    EncodingTreeNode* c = new EncodingTreeNode(new EncodingTreeNode('A'),
+                                               new EncodingTreeNode('Z'));
+    EXPECT(!areEqual(a, c));
+
+    deallocateTree(a);
+    deallocateTree(b);
+    deallocateTree(c);
+}
+
+STUDENT_TEST("check areEqual on example from website vs simple and example trees") {
+    EncodingTreeNode* simple = new EncodingTreeNode(new EncodingTreeNode('A'),
+                                                    new EncodingTreeNode('B')); // simple tree
+    EncodingTreeNode* ex1 = createExampleTree(); // example tree 1
+    EncodingTreeNode* ex2 = createExampleTree(); // example tree 2
+    EXPECT(!areEqual(ex1, simple)); // example 1 and simple should be diff
+    EXPECT(areEqual(ex1, ex2)); // example 1 and 2 should be same
+
+    deallocateTree(simple);
+    deallocateTree(ex1);
+    deallocateTree(ex2);
+}
+
+STUDENT_TEST("check areEqual on a tree and its own subtree") {
+    EncodingTreeNode* ex = createExampleTree();
+    EXPECT(!areEqual(ex, ex->one)); // tree and its right subtree should be diff
+    deallocateTree(ex);
+}
 
 
-
-
+STUDENT_TEST("check createExampleTree and deallocateTree") {
+    EncodingTreeNode* tree = createExampleTree();
+    deallocateTree(tree);
+}
 
 
 
